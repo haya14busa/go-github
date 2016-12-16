@@ -42,7 +42,7 @@ const (
 	mediaTypeV3                = "application/vnd.github.v3+json"
 	defaultMediaType           = "application/octet-stream"
 	mediaTypeV3SHA             = "application/vnd.github.v3.sha"
-	mediaTypeOrgPermissionRepo = "application/vnd.github.v3.repository+json"
+	mediaTypeOrgPermissionRepo = "application/vnd.github.v4.repository+json"
 
 	// Media Type values to access preview APIs
 
@@ -91,6 +91,9 @@ const (
 
 	// https://developer.github.com/changes/2016-09-14-Integrations-Early-Access/
 	mediaTypeIntegrationPreview = "application/vnd.github.machine-man-preview+json"
+
+	// https://developer.github.com/changes/2016-12-14-reviews-api/
+	mediaTypePullRequestReview = "application/vnd.github.black-cat-preview+json"
 )
 
 // A Client manages communication with the GitHub API.
@@ -116,23 +119,24 @@ type Client struct {
 	common service // Reuse a single struct instead of allocating one for each service on the heap.
 
 	// Services used for talking to different parts of the GitHub API.
-	Activity       *ActivityService
-	Admin          *AdminService
-	Authorizations *AuthorizationsService
-	Gists          *GistsService
-	Git            *GitService
-	Gitignores     *GitignoresService
-	Integrations   *IntegrationsService
-	Issues         *IssuesService
-	Organizations  *OrganizationsService
-	Projects       *ProjectsService
-	PullRequests   *PullRequestsService
-	Repositories   *RepositoriesService
-	Search         *SearchService
-	Users          *UsersService
-	Licenses       *LicensesService
-	Migrations     *MigrationService
-	Reactions      *ReactionsService
+	Activity          *ActivityService
+	Admin             *AdminService
+	Authorizations    *AuthorizationsService
+	Gists             *GistsService
+	Git               *GitService
+	Gitignores        *GitignoresService
+	Integrations      *IntegrationsService
+	Issues            *IssuesService
+	Organizations     *OrganizationsService
+	Projects          *ProjectsService
+	PullRequests      *PullRequestsService
+	PullRequestReview *PullRequestReviewService
+	Repositories      *RepositoriesService
+	Search            *SearchService
+	Users             *UsersService
+	Licenses          *LicensesService
+	Migrations        *MigrationService
+	Reactions         *ReactionsService
 }
 
 type service struct {
@@ -202,6 +206,7 @@ func NewClient(httpClient *http.Client) *Client {
 	c.Organizations = (*OrganizationsService)(&c.common)
 	c.Projects = (*ProjectsService)(&c.common)
 	c.PullRequests = (*PullRequestsService)(&c.common)
+	c.PullRequestReview = (*PullRequestReviewService)(&c.common)
 	c.Reactions = (*ReactionsService)(&c.common)
 	c.Repositories = (*RepositoriesService)(&c.common)
 	c.Search = (*SearchService)(&c.common)
